@@ -1,0 +1,25 @@
+{
+    "Name" : "Putting Andrew W.K. to shame",
+    "Password" : "stuff",
+    "Lat" : "41.893908",
+    "Long" : "-87.635064",
+    "Artists" : [
+        { 
+            "Name" : "Sade",
+            "Songs" : [
+                { "Title" : "Some Bullshit" },
+                { "Title" : "Other bullshit" },
+                { "Title" : "Come on, it's Sade" }
+            ]
+        },
+    
+        {
+            "Name" : "DMB",
+            "Songs" : [
+                { "Title" : "Whatever" },
+                { "Title" : "He uses numbers for songs, right?" },
+                { "Title" : "69" }
+            ]
+        }
+    ]
+}
