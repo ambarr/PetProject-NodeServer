@@ -22,6 +22,7 @@ var Artist = new Schema({
 var Party = new Schema({
     Name     : String,
     Password : String,
+    DeviceID : String,
     Artists  : [Artist],
     PartyLoc : {
         lng : Number,
@@ -40,6 +41,7 @@ exports.add = function(req, res) {
     var newParty = new PartyModel({
         Name     : req.body.Name,
         Password : req.body.Password,
+        DeviceID : req.body.DeviceID,
         Artists  : req.body.Artists,
         PartyLoc : {
             lng : req.body.Long,
