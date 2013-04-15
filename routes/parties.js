@@ -77,6 +77,7 @@ exports.end = function(req, res) {
 
 exports.request = function(req, res) {
     var message = new gcm.Message();
+    console.log(req.body.hostID);
     PartyModel.findOne( { _id : req.body.hostID }, function(err, parties) {
         if(err) {
             next(err);
@@ -87,6 +88,8 @@ exports.request = function(req, res) {
             sender.send(message, regIds, 5, function(err, result) {
                 console.log(result);
             });
+            res.statusCode = 200;
+            res.send("");
         }
     });
 }
