@@ -76,17 +76,25 @@ exports.end = function(req, res) {
 };
 
 exports.request = function(req, res) {
-    var message = new gcm.Message();
+    var message = new gcm.Message({
+        collapseKey: 'pet',
+        delayWhileIdle: true,
+        timeToLive: 3,
+        data: { }
+    });
  
-    PartyModel.findOne( { _id : req.body.hostID }, function(err, parties) {
+    PartyModel.findOne( { _id : req.body.hostID }, function(err, parties) {  
         if(err) {
-            next(err);
+            next(err); 
             res.send(err);
         }
         else {
             var regIds = []; 
             regIds.push(parties.DeviceID);
-            sender.send(message, regIds, 5, function(err, result) {
+            sender.send(message, regIds, 4, function(err, result) {
+                console.log("err: " + err);
+                console.log(regIds);
+                console.log(message);
                 if(!err) {
                     res.send("result: " + result);
                 }
