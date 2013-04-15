@@ -1,3 +1,6 @@
+var gcm = require('node-gcm');
+var sender = new gcm.Sender('AIzaSyBH-0UxgOg7HhBwG44qEiGn76y5kp0M8pw');
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -24,6 +27,7 @@ var Party = new Schema({
     Password : String,
     DeviceID : String,
     Artists  : [Artist],
+    Listeners: [String],
     PartyLoc : {
         lng : Number,
         lat : Number
@@ -43,6 +47,7 @@ exports.add = function(req, res) {
         Password : req.body.Password,
         DeviceID : req.body.DeviceID,
         Artists  : req.body.Artists,
+        Listeners: [],
         PartyLoc : {
             lng : req.body.Long,
             lat : req.body.Lat
@@ -71,7 +76,19 @@ exports.end = function(req, res) {
 };
 
 exports.request = function(req, res) {
-    
+    var message = new gcm.Message();
+    PartyModel.findOne( { _id : req.body.hostID }, function(err, parties) {
+        if(err) {
+            next(err);
+            res.send(err);
+        }
+        else {
+            var regIds = [ parties.DeviceID ];
+            sender.send(message, regIds, 5, function(err, result) {
+                console.log(result);
+            });
+        }
+    });
 }
 
 /*
@@ -112,7 +129,8 @@ exports.join = function(req, res) {
             next(err);
             res.send(err);
         }
-        
+
+        parties.Listeners.push(req.body.deviceID); 
         res.send(parties.Artists);
     });
 }
