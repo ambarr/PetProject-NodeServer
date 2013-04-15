@@ -1,5 +1,5 @@
 var gcm = require('node-gcm');
-var sender = new gcm.Sender('AIzaSyBH-0UxgOg7HhBwG44qEiGn76y5kp0M8pw');
+var sender = new gcm.Sender('AIzaSyCY0-eGhEfKdzvTHvzL3ClZgHyhws03kmY');
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
@@ -77,7 +77,7 @@ exports.end = function(req, res) {
 
 exports.request = function(req, res) {
     var message = new gcm.Message();
-    console.log(req.body.hostID);
+ 
     PartyModel.findOne( { _id : req.body.hostID }, function(err, parties) {
         if(err) {
             next(err);
@@ -91,11 +91,9 @@ exports.request = function(req, res) {
                     res.send("result: " + result);
                 }
                 else {
-                    res.send(err);
+                    res.send("err: " + err);
                 }
             });
-            res.statusCode = 200;
-            res.send("");
         }
     });
 }
