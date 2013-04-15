@@ -84,10 +84,11 @@ exports.request = function(req, res) {
             res.send(err);
         }
         else {
-            var regIds = [ parties.DeviceID ];
-            console.log("DeviceID: " + parties.DeviceID);
+            var regIds = [];
+            regIds.push(parties.hostID);
             sender.send(message, regIds, 5, function(err, result) {
                 console.log(result);
+                res.send(result);
             });
             res.statusCode = 200;
             res.send("");
