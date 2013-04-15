@@ -85,6 +85,7 @@ exports.request = function(req, res) {
         }
         else {
             var regIds = [ parties.DeviceID ];
+            console.log("DeviceID: " + parties.DeviceID);
             sender.send(message, regIds, 5, function(err, result) {
                 console.log(result);
             });
