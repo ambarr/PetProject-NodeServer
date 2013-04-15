@@ -84,9 +84,8 @@ exports.request = function(req, res) {
             res.send(err);
         }
         else {
-            var regIds = [];
-            console.log(parties.hostID);
-            regIds.push(parties.hostID);
+            var regIds = []; 
+            regIds.push(parties.DeviceID);
             sender.send(message, regIds, 5, function(err, result) {
                 if(!err) {
                     res.send("result: " + result);
