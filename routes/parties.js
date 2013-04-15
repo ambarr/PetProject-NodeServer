@@ -87,8 +87,12 @@ exports.request = function(req, res) {
             var regIds = [];
             regIds.push(parties.hostID);
             sender.send(message, regIds, 5, function(err, result) {
-                console.log(result);
-                res.send(result);
+                if(!err) {
+                    res.send("result: " + result);
+                }
+                else {
+                    res.send(err);
+                }
             });
             res.statusCode = 200;
             res.send("");
