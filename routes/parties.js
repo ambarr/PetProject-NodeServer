@@ -91,16 +91,11 @@ exports.request = function(req, res) {
         else {
             var regIds = []; 
             regIds.push(parties.DeviceID);
-            sender.send(message, regIds, 4, function(err, result) {
-                console.log("err: " + err);
-                console.log(regIds);
-                console.log(message);
-                if(!err) {
-                    res.send("result: " + result);
-                }
-                else {
-                    res.send("err: " + err);
-                }
+            sender.send(message, regIds, 4, function(result) { 
+                console.log("ids: " + regIds);
+                console.log("m: " + message);
+                console.log("res: " + result);
+                res.send(result);
             });
         }
     });
