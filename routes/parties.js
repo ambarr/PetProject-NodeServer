@@ -80,9 +80,7 @@ exports.request = function(req, res) {
         collapseKey: 'pet',
         delayWhileIdle: true,
         timeToLive: 3,
-        data: {
-            key:'data'
-        }
+        data: { }
     });
  
     PartyModel.findOne( { _id : req.body.hostID }, function(err, parties) {  
@@ -93,7 +91,10 @@ exports.request = function(req, res) {
         else {
             var regIds = []; 
             regIds.push(parties.DeviceID);
-            sender.send(message, regIds, 4, function(result) { 
+            sender.sendNoRetry(message, regIds, function(err, result) { 
+                if(err) {
+                    console.log("Err: " + err);
+                }
                 console.log("ids: " + regIds);
                 console.log("m: " + message);
                 console.log("res: " + result);
