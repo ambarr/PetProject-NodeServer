@@ -13,7 +13,7 @@ exports.notifyHost = function(deviceId, callback) {
         headers: {
             'Content-Type': 'application/json',
             'Content-length': Buffer.byteLength(reqBody, 'utf8'),
-            'Authorization': 'key=' + 'AIzaSyCY0-eGhEfKdzvTHvzL3ClZgHyhws03kmY'
+            'Authorization': 'key=' + process.env.BROWSER_KEY 
         }
     };
  
@@ -28,8 +28,7 @@ exports.notifyHost = function(deviceId, callback) {
         
         res.on('end', function() {
             if(statusCode == 401) {
-                console.log("Unauthorized GCM API key");
-                console.log(buf);
+                console.log("Unauthorized GCM API key"); 
                 return callback(statusCode, null);
             }
             else if(statusCode == 503) {
