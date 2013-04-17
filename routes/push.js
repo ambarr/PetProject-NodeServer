@@ -29,6 +29,7 @@ exports.notifyHost = function(deviceId, callback) {
         res.on('end', function() {
             if(statusCode == 401) {
                 console.log("Unauthorized GCM API key");
+                console.log(buf);
                 return callback(statusCode, null);
             }
             else if(statusCode == 503) {
