@@ -1,12 +1,10 @@
-var gcm = require('node-gcm');
-var sender = new gcm.Sender('AIzaSyCY0-eGhEfKdzvTHvzL3ClZgHyhws03kmY');
-
+var push = require('./push');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var db = mongoose.createConnection('mongodb://Pet:party@ds031857.mongolab.com:31857/petproject');
 db.on('open', function() {
-  console.log("Mongolab connection open!");
+    console.log("Mongolab connection open!");
 });
 
 /*
@@ -30,7 +28,7 @@ var Party = new Schema({
     Listeners: [String],
     PartyLoc : {
         lng : Number,
-        lat : Number
+    lat : Number
     }
 });
 
@@ -41,7 +39,7 @@ var PartyModel = db.model('PartyModel', Party);
  */
 
 exports.add = function(req, res) {
-   
+
     var newParty = new PartyModel({
         Name     : req.body.Name,
         Password : req.body.Password,
@@ -50,24 +48,24 @@ exports.add = function(req, res) {
         Listeners: [],
         PartyLoc : {
             lng : req.body.Long,
-            lat : req.body.Lat
+        lat : req.body.Lat
         }
     });
 
     newParty.save(function(err) {
-    if(err) {
-      console.log("add_error " + err);
-      res.send(500, 'Ruh-roh');
-      return;
-    }
-    
-    console.log("Party: " + req.body.Name + " saved.");
-    res.send(newParty._id);
-  }); 
+        if(err) {
+            console.log("add_error " + err);
+            res.send(500, 'Ruh-roh');
+            return;
+        }
+
+        console.log("Party: " + req.body.Name + " saved.");
+        res.send(newParty._id);
+    }); 
 };
 
 exports.end = function(req, res) {
-     
+
     PartyModel.remove({ _id: req.params.id }, function(err) {
         if(err) res.send(500, "Couldn't delete party");
         res.send("Success");
@@ -76,33 +74,21 @@ exports.end = function(req, res) {
 };
 
 exports.request = function(req, res) {
-    var message = new gcm.Message({
-        collapseKey: 'pet',
-        delayWhileIdle: true,
-        timeToLive: 3,
-        data: { }
-    });
- 
-    PartyModel.findOne( { _id : req.body.hostID }, function(err, parties) {  
+    var deviceId; 
+    PartyModel.findOne( { _id : req.body.hostID }, function(err, parties) { 
         if(err) {
-            next(err); 
+            next(err);
             res.send(err);
+            return;
         }
         else {
-            var regIds = []; 
-            regIds.push(parties.DeviceID);
-            sender.sendNoRetry(message, regIds, function(err, result) { 
-                if(err) {
-                    console.log("Err: " + err);
-                }
-                console.log("ids: " + regIds);
-                console.log("m: " + message);
-                console.log("res: " + result);
-                res.send(result);
-            });
+            
+            push.notifyHost(parties.DeviceID, function(err, response) {
+                res.send(response);
+            }); 
         }
     });
-}
+};
 
 /*
  * GET
@@ -121,7 +107,7 @@ exports.findNearby = function(req, res) {
                 console.log(parties.results[0].obj.Name);
                 res.send(parties.results);
             }
-    );
+        );
 }
 
 exports.findByName = function(req, res) {
@@ -130,7 +116,7 @@ exports.findByName = function(req, res) {
             next(err);
             res.send(err);
         }
-        
+
         console.log("find_by_name: " + req.query.name); 
         res.send(parties);
     });
