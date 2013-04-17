@@ -13,7 +13,7 @@ exports.notifyHost = function(deviceId, callback) {
         headers: {
             'Content-Type': 'application/json',
             'Content-length': Buffer.byteLength(reqBody, 'utf8'),
-            'Authorization': 'key=' + 'AIzaSyCmxdlAgdLy2BUxDXmk9ksP9lqVC8bz_ks'
+            'Authorization': 'key=' + 'AIzaSyCY0-eGhEfKdzvTHvzL3ClZgHyhws03kmY'
         }
     };
  
