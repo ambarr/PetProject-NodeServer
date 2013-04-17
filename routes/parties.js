@@ -80,7 +80,9 @@ exports.request = function(req, res) {
         collapseKey: 'pet',
         delayWhileIdle: true,
         timeToLive: 3,
-        data: { }
+        data: {
+            key:'data'
+        }
     });
  
     PartyModel.findOne( { _id : req.body.hostID }, function(err, parties) {  
