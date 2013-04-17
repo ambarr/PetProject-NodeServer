@@ -56,6 +56,5 @@ exports.notifyHost = function(deviceId, callback) {
     });
     
     post.write(reqBody);
-    post.end();
-    
+    post.end(); 
 };

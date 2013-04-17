@@ -2,7 +2,7 @@ var push = require('./push');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var db = mongoose.createConnection('mongodb://Pet:party@ds031857.mongolab.com:31857/petproject');
+var db = mongoose.createConnection(process.env.MONGOLAB_URI);
 db.on('open', function() {
     console.log("Mongolab connection open!");
 });
@@ -26,9 +26,10 @@ var Party = new Schema({
     DeviceID : String,
     Artists  : [Artist],
     Listeners: [String],
+    Requests : [String],
     PartyLoc : {
         lng : Number,
-    lat : Number
+        lat : Number
     }
 });
 
@@ -82,7 +83,7 @@ exports.request = function(req, res) {
             return;
         }
         else {
-            
+            parties.Requests.concat(req.body.songNames); 
             push.notifyHost(parties.DeviceID, function(err, response) {
                 res.send(response);
             }); 
@@ -131,5 +132,19 @@ exports.join = function(req, res) {
 
         parties.Listeners.push(req.body.deviceID); 
         res.send(parties.Artists);
+    });
+}
+
+exports.getRequests = function(req, res) {
+    //TODO - Authenticate host?
+    
+    PartyModel.findOne( { _id : req.query.id }, function(err, party) {
+        if(err) {
+            res.send(err);
+        }
+        else {
+            res.send(party.Requests);
+            party.Requests = [];
+        }
     });
 }
