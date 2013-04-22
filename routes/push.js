@@ -3,7 +3,7 @@ var http = require('http');
 exports.notifyHost = function(deviceId, callback) {
     var body = {};
     body['registration_ids'] = [ deviceId ];
-    body['song_requests'] = true;
+    body['data'] = { "action":"song_requests" };
 
     var reqBody = JSON.stringify(body);
     var post_options = {
