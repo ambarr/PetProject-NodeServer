@@ -152,7 +152,7 @@ exports.findByName = function(req, res) {
 exports.getRequests = function(req, res) {
     //TODO - Authenticate host?
     
-    PartyModel.findOne( { _id : req.query.id }, function(err, party) {
+    PartyModel.findOne( { _id : req.params.id }, function(err, party) {
         if(err) {
             res.send(err);
         }

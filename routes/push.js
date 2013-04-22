@@ -3,7 +3,8 @@ var http = require('http');
 exports.notifyHost = function(deviceId, callback) {
     var body = {};
     body['registration_ids'] = [ deviceId ];
-    
+    body['song_requests'] = true;
+
     var reqBody = JSON.stringify(body);
     var post_options = {
         host: 'android.googleapis.com',
@@ -36,6 +37,7 @@ exports.notifyHost = function(deviceId, callback) {
                 return callback(statusCode, null);
             }
             else if(statusCode != 200) {
+                // TODO - remove party from server if host device is no longer available
                 console.log("Invalid GCM request with error code " + statusCode);
                 return callback(statusCode, null);
             }

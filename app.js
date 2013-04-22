@@ -41,7 +41,7 @@ app.post('/api/request_songs', parties.request);
 
 app.get('/api/find_nearby', parties.findNearby);
 app.get('/api/find_by_name', parties.findByName);
-app.get('/api/get_requests', parties.getRequests);
+app.get('/api/get_requests/:id', parties.getRequests);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
