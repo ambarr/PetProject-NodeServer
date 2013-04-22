@@ -91,6 +91,30 @@ exports.request = function(req, res) {
     });
 };
 
+exports.join = function(req, res) {
+    PartyModel.findOne( { _id : req.body.id }, function (err, parties) {
+        if(err) {
+            next(err);
+            res.send(401, 'Party not on server');
+        }
+
+        parties.Listeners.push(req.body.deviceID); 
+        res.send(parties.Artists);
+    });
+};
+
+exports.leave = function(req, res) {
+    PartyModel.findOne( { _id : req.body.id }, function(err, party) {
+        if(err) {
+            next(err);
+            res.send(401, 'Party not on server');
+        }
+
+        parties.Listeners.remove(req.body.deviceID);
+        res.send(200, 'success');
+    });
+};
+
 /*
  * GET
  */
@@ -123,17 +147,7 @@ exports.findByName = function(req, res) {
     });
 }
 
-exports.join = function(req, res) {
-    PartyModel.findOne( { _id : req.body.id }, function (err, parties) {
-        if(err) {
-            next(err);
-            res.send(err);
-        }
 
-        parties.Listeners.push(req.body.deviceID); 
-        res.send(parties.Artists);
-    });
-}
 
 exports.getRequests = function(req, res) {
     //TODO - Authenticate host?

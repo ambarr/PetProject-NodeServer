@@ -35,11 +35,13 @@ app.get('/users', user.list);
 app.post('/api/add_party', parties.add);
 app.delete('/api/end_party/:id', parties.end);
 
+app.post('/api/join_party', parties.join);
+app.post('/api/leave_party', parties.leave);
 app.post('/api/request_songs', parties.request);
 
 app.get('/api/find_nearby', parties.findNearby);
 app.get('/api/find_by_name', parties.findByName);
-app.get('/api/join_party', parties.join);
+app.get('/api/get_requests', parties.getRequests);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
