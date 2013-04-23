@@ -87,6 +87,12 @@ exports.request = function(req, res) {
                 console.log(req.body.songNames[i]);
                 parties.Requests.push(req.body.songNames[i]);
             }
+            parties.save(function(e, party) {
+                if(e) {
+                    res.send(500, "Error updating party");
+                    return;
+                }
+            });
             push.notifyHost(parties.DeviceID, function(err, response) {
                 res.send(response);
             }); 
