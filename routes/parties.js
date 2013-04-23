@@ -84,6 +84,7 @@ exports.request = function(req, res) {
         }
         else {            
             for(var i = 0; i < req.body.songNames.length; i++) {
+                console.log(req.body.songNames[i]);
                 parties.Requests.push(req.body.songNames[i]);
             }
             push.notifyHost(parties.DeviceID, function(err, response) {
