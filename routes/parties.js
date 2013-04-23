@@ -76,6 +76,7 @@ exports.end = function(req, res) {
 
 exports.request = function(req, res) {
     var deviceId; 
+    console.log(req.body.songNames);
     PartyModel.findOne( { _id : req.body.hostID }, function(err, parties) { 
         if(err) {
             next(err);
@@ -83,6 +84,7 @@ exports.request = function(req, res) {
             return;
         }
         else {
+            console.log(parties.Requests);
             parties.Requests = parties.Requests.concat(req.body.songNames); 
             push.notifyHost(parties.DeviceID, function(err, response) {
                 res.send(response);
