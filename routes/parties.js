@@ -76,16 +76,16 @@ exports.end = function(req, res) {
 
 exports.request = function(req, res) {
     var deviceId; 
-    console.log(req.body.songNames);
     PartyModel.findOne( { _id : req.body.hostID }, function(err, parties) { 
         if(err) {
             next(err);
             res.send(err);
             return;
         }
-        else {
-            console.log(parties.Requests);
-            parties.Requests = parties.Requests.concat(req.body.songNames); 
+        else {            
+            for(var i = 0; i < req.body.songNames.length; i++) {
+                parties.Requests.push(req.body.songNames[i]);
+            }
             push.notifyHost(parties.DeviceID, function(err, response) {
                 res.send(response);
             }); 
