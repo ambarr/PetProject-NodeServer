@@ -83,7 +83,7 @@ exports.request = function(req, res) {
             return;
         }
         else {
-            parties.Requests.concat(req.body.songNames); 
+            parties.Requests = parties.Requests.concat(req.body.songNames); 
             push.notifyHost(parties.DeviceID, function(err, response) {
                 res.send(response);
             }); 
