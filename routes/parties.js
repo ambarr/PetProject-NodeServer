@@ -27,7 +27,7 @@ var Party = new Schema({
     DeviceID : String,
     Artists  : [Artist],
     Listeners: [String],
-    Requests : [String],
+    Requests : [Song],
     PartyLoc : {
         lng : Number,
         lat : Number
@@ -50,7 +50,7 @@ exports.add = function(req, res) {
         Listeners: [],
         PartyLoc : {
             lng : req.body.Long,
-        lat : req.body.Lat
+            lat : req.body.Lat
         }
     });
 
@@ -84,8 +84,9 @@ exports.request = function(req, res) {
             return;
         }
         else {            
-            for(var i = 0; i < req.body.songNames.length; i++) { 
-                parties.Requests.push(req.body.songNames[i]);
+            for(var i = 0; i < req.body.songs.length; i++) { 
+                parties.Requests.push( { Title  : req.body.songs[i].Title,
+                                         Source : req.body.songs[i].Source });
             }
             parties.save(function(e, party) {
                 if(e) {
