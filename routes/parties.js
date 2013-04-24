@@ -12,7 +12,8 @@ db.on('open', function() {
  */
 
 var Song = new Schema({
-    Title : String
+    Title  : String,
+    Source : String
 });
 
 var Artist = new Schema({
@@ -83,8 +84,7 @@ exports.request = function(req, res) {
             return;
         }
         else {            
-            for(var i = 0; i < req.body.songNames.length; i++) {
-                console.log(req.body.songNames[i]);
+            for(var i = 0; i < req.body.songNames.length; i++) { 
                 parties.Requests.push(req.body.songNames[i]);
             }
             parties.save(function(e, party) {
@@ -168,6 +168,11 @@ exports.getRequests = function(req, res) {
         else {
             res.send(party.Requests);
             party.Requests = [];
+            party.save(function(err, party) {
+                if(err) {
+                    console.log("Error saving party after clearing requests");
+                }
+            });
         }
     });
 }
