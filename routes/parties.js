@@ -27,7 +27,7 @@ var Party = new Schema({
     DeviceID : String,
     Artists  : [Artist],
     Listeners: [String],
-    Requests : [Song],
+    Requests : [String],
     PartyLoc : {
         lng : Number,
         lat : Number
@@ -84,9 +84,8 @@ exports.request = function(req, res) {
             return;
         }
         else {            
-            for(var i = 0; i < req.body.songs.length; i++) { 
-                parties.Requests.push( { Title  : req.body.songs[i].Title,
-                                         Source : req.body.songs[i].Source });
+            for(var i = 0; i < req.body.songNames.length; i++) { 
+                parties.Requests.push(req.body.songNames[i]); 
             }
             parties.save(function(e, party) {
                 if(e) {
@@ -133,7 +132,7 @@ exports.findNearby = function(req, res) {
     var lat = Number(req.query.lat);
     var lng = Number(req.query.lng);
     PartyModel.collection.geoNear(lng, lat,
-            { spherical : true, maxDistance : 1000 }, 
+            { spherical : true, maxDistance : 100 }, 
             function(err, parties) {
                 if(err) {
                     next(err);
