@@ -132,15 +132,20 @@ exports.findNearby = function(req, res) {
     var lat = Number(req.query.lat);
     var lng = Number(req.query.lng);
     PartyModel.collection.geoNear(lng, lat,
-            { spherical : true, maxDistance : 0.00002 },
-            "Name _id",
+            { spherical : true, maxDistance : 0.00002 }, 
             function(err, parties) {
                 if(err) {
                     next(err);
                     res.send(err);
                 }
-                console.log(parties.results[0].obj.Name);
-                res.send(parties.results);
+                var arr = [];
+                for(i = 0; i < parties.results.length; i++) {
+                    var obj = { "Name":parties.results[i].name,
+                                "id"  :parties.results[i]._id
+                              };
+                    arr.push(obj);
+                }
+                res.send(arr);
             }
         );
 }
