@@ -140,8 +140,14 @@ exports.findNearby = function(req, res) {
                 }
  
                 var arr = []; 
-                for(i = 0; i < parties.results.length; i++) { 
+                for(i = 0; i < parties.results.length; i++) {
+                    var hasPassword = true;
+                    if(parties.results[i].obj.Password == "" 
+                            || parties.results[i].obj.Password == null)
+                        hasPassword = false;
+
                     var obj = { "Name":parties.results[i].obj.Name,
+                                "Password" : hasPassword,
                                 "id"  :parties.results[i].obj._id
                               };
                    
