@@ -138,11 +138,13 @@ exports.findNearby = function(req, res) {
                     next(err);
                     res.send(err);
                 }
-                var arr = [];
-                for(i = 0; i < parties.results.length; i++) {
-                    var obj = { "Name":parties.results[i].name,
-                                "id"  :parties.results[i]._id
+ 
+                var arr = []; 
+                for(i = 0; i < parties.results.length; i++) { 
+                    var obj = { "Name":parties.results[i].obj.Name,
+                                "id"  :parties.results[i].obj._id
                               };
+                   
                     arr.push(obj);
                 }
                 res.send(arr);
