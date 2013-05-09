@@ -12,8 +12,9 @@ db.on('open', function() {
  */
 
 var Song = new Schema({
-    Title  : String,
-    Source : String
+    Title       : String,
+    ArtistName  : String,
+    Source      : String
 });
 
 var Artist = new Schema({
@@ -107,7 +108,7 @@ exports.join = function(req, res) {
             res.send(401, 'Party not on server');
         }
 
-        parties.Listeners.push(req.body.deviceID); 
+        parties.Listeners.push(req.body.deviceID);
         res.send(parties.Artists);
     });
 };
