@@ -28,7 +28,7 @@ var Party = new Schema({
     DeviceID : String,
     Artists  : [Artist],
     Listeners: [String],
-    Requests : [String],
+    Requests : [Song],
     PartyLoc : {
         lng : Number,
         lat : Number
@@ -49,6 +49,7 @@ exports.add = function(req, res) {
         DeviceID : req.body.DeviceID,
         Artists  : req.body.Artists,
         Listeners: [],
+        Requests : [],
         PartyLoc : {
             lng : req.body.Long,
             lat : req.body.Lat
