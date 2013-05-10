@@ -85,7 +85,9 @@ exports.request = function(req, res) {
             res.send(err);
             return;
         }
-        else {            
+        else {      
+            console.log("Requesting songs for party : " + parties.Name);
+            console.log(parties.Requests);
             for(var i = 0; i < req.body.songNames.length; i++) { 
                 parties.Requests.push(req.body.songNames[i]); 
             }
