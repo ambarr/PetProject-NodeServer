@@ -96,7 +96,7 @@ exports.request = function(req, res) {
                 }
             });
             push.notifyHost(parties.DeviceID, function(err, response) {
-                res.send(response);
+                res.send(200, "Success");
             }); 
         }
     });
@@ -110,6 +110,13 @@ exports.join = function(req, res) {
         }
 
         parties.Listeners.push(req.body.deviceID);
+        parties.save(function(e, party) {
+            if(e) {
+                res.send(500, "Error adding listener");
+                return;
+            }
+        });
+
         res.send(parties.Artists);
     });
 };
