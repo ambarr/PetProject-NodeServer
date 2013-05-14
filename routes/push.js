@@ -83,19 +83,11 @@ exports.notifyListenersPartyEnd = function(deviceIds, callback) {
         }
     };
 
-    postGCM(body, post_options, function(err, data) {
-        callback(err,data);   
-    });
 
-};
-
-var postGCM = function(body, post_options, callback) {
-    var reqBody = JSON.stringify(body);
-    
     var post = http.request(post_options, function(res) {
         var statusCode = res.statusCode;
         var buf = '';
-        console.log("ultrapost"); 
+        
         res.setEncoding('utf8');
         res.on('data', function(data) {
             buf += data;
@@ -104,16 +96,16 @@ var postGCM = function(body, post_options, callback) {
         res.on('end', function() {
             if(statusCode == 401) {
                 console.log("Unauthorized GCM API key"); 
-                callback(statusCode, null);
+                return callback(statusCode, null);
             }
             else if(statusCode == 503) {
                 console.log("GCM servers unavailable");
-                callback(statusCode, null);
+                return callback(statusCode, null);
             }
             else if(statusCode != 200) {
                 // TODO - remove party from server if host device is no longer available
                 console.log("Invalid GCM request with error code " + statusCode);
-                callback(statusCode, null); 
+                return callback(statusCode, null);
             }
 
             try {
@@ -123,12 +115,14 @@ var postGCM = function(body, post_options, callback) {
                 console.log("Error handling GCM response " + e);
                 callback("error", null);
             }
-           
         });
 
         post.on('error', function (e) {
             console.log("Exception during GCM request: " + e);
-            callback("request error", null);
+            return callback("request error", null);
         });
     });
+    
+    post.write(reqBody);
+    post.end(); 
 };
