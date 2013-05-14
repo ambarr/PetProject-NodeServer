@@ -66,8 +66,7 @@ exports.notifyListenersPartyEnd = function(deviceIds, callback) {
     if(deviceIds.length == 0)
         return;
 
-    var body = {};
-    console.log("ids: " + deviceIds);
+    var body = {}; 
     body['registration_ids'] = [ deviceIds ];
     body['data'] = { "action":"end_party" };
 
@@ -84,11 +83,13 @@ exports.notifyListenersPartyEnd = function(deviceIds, callback) {
         }
     };
 
-    postGCM(body, post_options, callback);
+    postGCM(body, post_options, function(err, data) {
+        callback(err,data);   
+    });
 
 };
 
-function postGCM(body, post_options, callback) {
+var postGCM = function(body, post_options, callback) {
     var reqBody = JSON.stringify(body);
     
     var post = http.request(post_options, function(res) {
@@ -103,37 +104,31 @@ function postGCM(body, post_options, callback) {
         res.on('end', function() {
             if(statusCode == 401) {
                 console.log("Unauthorized GCM API key"); 
-                callback.call(statusCode, null);
-                return;
+                callback(statusCode, null);
             }
             else if(statusCode == 503) {
                 console.log("GCM servers unavailable");
-                callback.call(statusCode, null);
-                return;
+                callback(statusCode, null);
             }
             else if(statusCode != 200) {
                 // TODO - remove party from server if host device is no longer available
                 console.log("Invalid GCM request with error code " + statusCode);
-                callback.call(statusCode, null);
-                return;
+                callback(statusCode, null); 
             }
 
             try {
                 var data = JSON.parse(buf);
-                callback.call(null, data);
-                return;
+                callback(null, data);
             } catch (e) {
                 console.log("Error handling GCM response " + e);
-                callback.call("error", null);
-                return;
+                callback("error", null);
             }
            
         });
 
         post.on('error', function (e) {
             console.log("Exception during GCM request: " + e);
-            callback.call("request error", null);
-            return;
+            callback("request error", null);
         });
     });
 };
