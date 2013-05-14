@@ -144,7 +144,7 @@ exports.findNearby = function(req, res) {
     var lng = Number(req.query.lng);
     console.log("lat: " + lat + " lng: " + lng);
     PartyModel.collection.geoNear(lng, lat,
-            { spherical : true, maxDistance : 0.00005 }, 
+            { spherical : true, maxDistance : 1000 }, 
             function(err, parties) {
                 if(err) {
                     next(err);
