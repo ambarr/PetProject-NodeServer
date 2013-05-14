@@ -68,13 +68,25 @@ exports.add = function(req, res) {
     }); 
 };
 
-exports.end = function(req, res) {
+exports.end = function(req, res) { 
+    PartyModel.findOne( { _id : req.params.id }, function(err, party) { 
+        var listeners = party.Listeners;
+        push.notifyListenersPartyEnd(listeners, function(err, response) {
+            console.log(response);
+            
+            if(err) {
+                // TODO - Need to hold on to some info, so as to retry after party
+                // is removed from db
+                console.log(err);
+            }
+        }); 
+    });
 
     PartyModel.remove({ _id: req.params.id }, function(err) {
         if(err) res.send(500, "Couldn't delete party");
-        res.send("Success");
-    });
-    res.send("Success"); 
+        res.send("Success"); 
+    }); 
+
 };
 
 exports.request = function(req, res) {
