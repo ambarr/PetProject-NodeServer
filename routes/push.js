@@ -94,7 +94,7 @@ function postGCM(body, post_options, callback) {
     var post = http.request(post_options, function(res) {
         var statusCode = res.statusCode;
         var buf = '';
-        
+        console.log("ultrapost"); 
         res.setEncoding('utf8');
         res.on('data', function(data) {
             buf += data;
