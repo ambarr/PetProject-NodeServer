@@ -88,7 +88,7 @@ exports.notifyListenersPartyEnd = function(deviceIds, callback) {
 
 };
 
-var postGCM = function(body, post_options, callback) {
+function postGCM(body, post_options, callback) {
     var reqBody = JSON.stringify(body);
     
     var post = http.request(post_options, function(res) {
