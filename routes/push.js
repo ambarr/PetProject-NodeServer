@@ -86,7 +86,7 @@ exports.notifyListenersPartyEnd = function(deviceIds, callback) {
 
 var postGCM = function(body, post_options, callback) {
     var reqBody = JSON.stringify(body);
-    callback.call(null, "hello"); 
+    
     var post = http.request(post_options, function(res) {
         var statusCode = res.statusCode;
         var buf = '';
@@ -117,11 +117,13 @@ var postGCM = function(body, post_options, callback) {
             try {
                 var data = JSON.parse(buf);
                 callback.call(null, data);
+                return;
             } catch (e) {
                 console.log("Error handling GCM response " + e);
                 callback.call("error", null);
+                return;
             }
-            return;
+           
         });
 
         post.on('error', function (e) {
