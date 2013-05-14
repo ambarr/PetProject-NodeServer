@@ -64,6 +64,7 @@ exports.notifyHost = function(deviceId, callback) {
 exports.notifyListenersPartyEnd = function(deviceIds, callback) {
 
     var body = {};
+    console.log("ids: " + deviceIds);
     body['registration_ids'] = deviceIds;
     body['data'] = { "action":"end_party" };
 
