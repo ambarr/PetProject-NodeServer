@@ -23,13 +23,17 @@ var Artist = new Schema({
 });
 
 var Party = new Schema({
-    Name     : String,
-    Password : String,
-    DeviceID : String,
-    Artists  : [Artist],
-    Listeners: [String],
-    Requests : [Song],
-    PartyLoc : {
+    Name       : String,
+    Password   : String,
+    DeviceID   : String,
+    Artists    : [Artist],
+    Listeners  : [String],
+    Requests   : [Song],
+    NowPlaying : {
+        Artist : String,
+        Song   : String
+    },
+    PartyLoc   : {
         lng : Number,
         lat : Number
     }
@@ -50,6 +54,10 @@ exports.add = function(req, res) {
         Artists  : req.body.Artists,
         Listeners: [],
         Requests : [],
+        NowPlaying : {
+            Artist : "",
+            Song   : ""
+        },
         PartyLoc : {
             lng : req.body.Long,
             lat : req.body.Lat
@@ -71,7 +79,7 @@ exports.add = function(req, res) {
 exports.end = function(req, res) { 
     PartyModel.findOne( { _id : req.params.id }, function(err, party) { 
         var listeners = party.Listeners;
-        push.notifyListenersPartyEnd(listeners, function(err, response) {
+        push.notifyListeners(listeners, "end_party", function(err, response) {
             console.log(response);
             
             if(err) {
@@ -113,6 +121,37 @@ exports.request = function(req, res) {
                 res.send(200, "Success");
             }); 
         }
+    });
+};
+
+exports.nowPlaying = function(req, res) {
+    PartyModel.findOne( { _id : req.body.id }, function(err, party) {
+        if(err) {
+            next(err);
+            res.send(401, 'Party not on server');
+        }
+
+        party.NowPlaying = {
+            Artist : req.body.ArtistName,
+            Song   : req.body.SongTitle
+        };
+        
+        party.save(function(saveErr, party) {
+            if(saveErr) {
+                res.send(500, "Error updating party");
+                return;
+            }
+            else
+                res.send(200, "Success");
+        });
+
+        var listeners = party.Listeners;
+
+        push.notifyListeners(listeners, "now_playing", function(notifyErr, response) {
+            if(notifyErr) {
+                // TODO - retry?
+            }
+        });
     });
 };
 
@@ -214,3 +253,14 @@ exports.getRequests = function(req, res) {
         }
     });
 }
+
+exports.getNowPlaying = function(req, res) {
+    PartyModel.findOne({_id : req.param.id }, function(err, party) {
+        if(err) {
+            res.send(err);
+        }
+        else {
+            res.send(party.NowPlaying);
+        }
+    });
+};

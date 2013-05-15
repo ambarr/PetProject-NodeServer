@@ -61,14 +61,14 @@ exports.notifyHost = function(deviceId, callback) {
     post.end(); 
 };
 
-exports.notifyListenersPartyEnd = function(deviceIds, callback) {
+exports.notifyListeners = function(deviceIds, action, callback) {
 
     if(deviceIds.length == 0)
         return;
 
     var body = {}; 
     body['registration_ids'] = deviceIds;
-    body['data'] = { "action":"end_party" };
+    body['data'] = {"action":action};
 
     var reqBody = JSON.stringify(body);
     var post_options = {
