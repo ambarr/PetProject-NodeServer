@@ -67,7 +67,7 @@ exports.notifyListenersPartyEnd = function(deviceIds, callback) {
         return;
 
     var body = {}; 
-    body['registration_ids'] = [ deviceIds ];
+    body['registration_ids'] = deviceIds;
     body['data'] = { "action":"end_party" };
 
     var reqBody = JSON.stringify(body);
