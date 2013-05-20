@@ -182,6 +182,19 @@ exports.leave = function(req, res) {
         }
 
         parties.Listeners.remove(req.body.deviceID);
+        var arr = parties.Listeners;
+        for(int i = 0; i < arr.length; i++) {
+            if(arr[i] == req.body.deviceID) {
+                arr = arr.splice(i, 1);
+            }
+        }
+        parties.Listeners = arr;
+        parties.save(function(e, party) {
+            if(e) {
+                res.send(500, "Error removing listener");
+            }
+        });
+
         res.send(200, 'success');
     });
 };
