@@ -161,6 +161,11 @@ exports.join = function(req, res) {
             next(err);
             res.send(401, 'Party not on server');
         }
+        
+        if(req.body.deviceID == null) {
+            res.send("400", "Provide device Id");
+            return;
+        }
 
         parties.Listeners.push(req.body.deviceID);
         parties.save(function(e, party) {
