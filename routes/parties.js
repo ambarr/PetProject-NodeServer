@@ -204,6 +204,28 @@ exports.leave = function(req, res) {
  * GET
  */
 
+exports.getAllParties = function(req, res) {
+    PartyModel.find({}, function(err, parties) {
+        if(err) {
+            next(err);
+            res.send(400, err);
+        }
+        /*var arr = [];
+        for(i = 0; i < parties.results.length; i++) {
+            var hasPassword=true;
+            if(parties.results[i].obj.Password == "" || parties.results[i].obj.Password == null)
+                hasPassword=false;
+            var obj = { 
+                "Name": parties.results[i].obj.Name,
+                "Password": hasPassword,
+                "id": parties.results[i].obj._id
+            }
+            arr.push(obj);
+        }*/
+        res.send(200, parties);
+    });
+}
+
 exports.findNearby = function(req, res) { 
     var lat = Number(req.query.lat);
     var lng = Number(req.query.lng);

@@ -40,6 +40,7 @@ app.post('/api/leave_party', parties.leave);
 app.post('/api/request_songs', parties.request);
 app.post('/api/update_now_playing', parties.nowPlaying);
 
+app.get('/api/get_all_parties', parties.getAllParties);
 app.get('/api/find_nearby', parties.findNearby);
 app.get('/api/find_by_name', parties.findByName);
 app.get('/api/get_requests/:id', parties.getRequests);
