@@ -72,7 +72,7 @@ exports.add = function(req, res) {
         }
 
         console.log("Party: " + req.body.Name + " saved.");
-        res.send(newParty._id);
+        res.send(200, newParty._id);
     }); 
 };
 
@@ -102,7 +102,7 @@ exports.request = function(req, res) {
     PartyModel.findOne( { _id : req.body.hostID }, function(err, parties) { 
         if(err) {
             next(err);
-            res.send(err);
+            res.send(400, err);
             return;
         }
         else {      
@@ -215,19 +215,17 @@ exports.getAllParties = function(req, res) {
             next(err);
             res.send(400, err);
         }
-        /*var arr = [];
-        for(i = 0; i < parties.results.length; i++) {
-            var hasPassword=true;
-            if(parties.results[i].obj.Password == "" || parties.results[i].obj.Password == null)
-                hasPassword=false;
-            var obj = { 
-                "Name": parties.results[i].obj.Name,
-                "Password": hasPassword,
-                "id": parties.results[i].obj._id
+        var arr = [];
+        parties.forEach(function(party) {
+            var obj = {
+                "Name": party.Name,
+                "Password": party.Password,
+                "id": party._id
             }
             arr.push(obj);
-        }*/
-        res.send(200, parties);
+        });
+
+        res.send(200, arr);
     });
 }
 
